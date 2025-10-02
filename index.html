@@ -1,0 +1,733 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>For You — a little love</title>
+
+  <!-- Google font (nice & minimal) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #f8f7f6;
+      --card: #ffffff;
+      --muted: #8b8b8b;
+      --accent: #c55b7a; /* subtle rose */
+      --accent-2: #6b7280;
+      --glass: rgba(255,255,255,0.6);
+      --shadow: 0 6px 30px rgba(16,24,40,0.08);
+      --radius: 14px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg, #fbfbfb 0%, #f2f2f3 100%);
+      color:#111827;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    /* page container */
+    .letter-wrap{
+      width:100%;
+      max-width:920px;
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      display:grid;
+      grid-template-columns: 1fr 420px;
+      gap:0;
+      min-height:520px;
+      position: relative;
+    }
+
+    /* Centralized photo frame - MOVED TO TOP */
+    .photo-frame {
+      position: absolute;
+      top: 20%; /* Moved higher */
+      left: 77%;
+      transform: translate(-50%, -50%);
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 8px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 
+        0 10px 30px rgba(197, 91, 122, 0.15),
+        inset 0 0 0 1px rgba(197, 91, 122, 0.1);
+      z-index: 2;
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -52%) scale(1.02); }
+    }
+
+    /* Decorative hearts in bottom right corner */
+    .decorative-hearts {
+      position: absolute;
+      bottom: 30px;
+      right: 40px;
+      width: 120px;
+      height: 300px;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .heart {
+      position: absolute;
+      opacity: 0.6;
+      animation: float-heart 8s ease-in-out infinite;
+    }
+
+    .heart-1 {
+      width: 25px;
+      height: 25px;
+      bottom: 10px;
+      right: 15px;
+      fill: #ff85a2;
+      animation-delay: 0s;
+    }
+
+    .heart-2 {
+      width: 20px;
+      height: 20px;
+      bottom: 40px;
+      right: 5px;
+      fill: #ff9eb5;
+      animation-delay: 1.5s;
+    }
+
+    .heart-3 {
+      width: 18px;
+      height: 18px;
+      bottom: 25px;
+      right: 45px;
+      fill: #ffb3c6;
+      animation-delay: 3s;
+    }
+
+    .heart-4 {
+      width: 22px;
+      height: 22px;
+      bottom: 60px;
+      right: 30px;
+      fill: #ffc2d1;
+      animation-delay: 4.5s;
+    }
+
+    .heart-5 {
+      width: 16px;
+      height: 16px;
+      bottom: 75px;
+      right: 10px;
+      fill: #ffd1dc;
+      animation-delay: 6s;
+    }
+
+    .heart-6 {
+      width: 28px;
+      height: 28px;
+      bottom: 5px;
+      right: 60px;
+      fill: #ff85a2;
+      animation-delay: 2s;
+    }
+
+    @keyframes float-heart {
+      0%, 100% {
+        transform: translateY(0) rotate(0deg) scale(1);
+        opacity: 0.6;
+      }
+      25% {
+        transform: translateY(-8px) rotate(5deg) scale(1.1);
+        opacity: 0.8;
+      }
+      50% {
+        transform: translateY(-12px) rotate(-3deg) scale(1.05);
+        opacity: 0.7;
+      }
+      75% {
+        transform: translateY(-5px) rotate(2deg) scale(1.08);
+        opacity: 0.9;
+      }
+    }
+
+    /* Left: message + imagery */
+    .left {
+      padding:48px;
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      gap:22px;
+      justify-content:center;
+      background:
+        linear-gradient(180deg, rgba(197,91,122,0.03), rgba(197,91,122,0.01));
+    }
+
+    .logo {
+      font-family: "Playfair Display", serif;
+      font-weight:600;
+      letter-spacing:0.02em;
+      color:var(--accent);
+      font-size:20px;
+    }
+
+    .title{
+      font-family: "Playfair Display", serif;
+      font-size:28px;
+      margin:0;
+      line-height:1.05;
+      color:#0f172a;
+    }
+    .subtitle{
+      color:var(--muted);
+      margin-top:6px;
+      font-size:16px;
+    }
+
+    .typed {
+      color:#111827;
+      font-size:16px;
+      line-height:1.6;
+      margin-top:8px;
+      max-width:58ch;
+    }
+
+    /* gallery - UPDATED FOR EVEN DISTRIBUTION AND BLUNT CORNERS */
+    .gallery {
+      display: flex;
+      justify-content: space-between; /* Evenly distributes all 4 boxes */
+      gap: 20px; /* Increased space between boxes */
+      margin-top: 14px;
+      align-items: center;
+      width: 100%;
+    }
+    .thumb {
+      flex: 1; /* Makes all boxes equal width */
+      min-width: 0; /* Prevents flex items from overflowing */
+      height: 110px;
+      width: 90px;
+      border-radius: 6px; /* Blunt corners (reduced from 12px) */
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+      transition: transform .25s ease, box-shadow .25s;
+      border: 1px solid rgba(15,23,42,0.03);
+    }
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .thumb:hover {
+      transform: translateY(-6px); 
+      box-shadow: 0 12px 30px rgba(15,23,42,0.1);
+    }
+
+    /* right: card with details and actions */
+    .right{
+      padding:36px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.5));
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      align-items:stretch;
+      justify-content:center;
+      border-left:1px solid rgba(15,23,42,0.03);
+    }
+
+    .info {
+      font-size:14px;
+      color:var(--muted);
+    }
+
+    .big-heart{
+      align-self:center;
+      margin-top:6px;
+      width:110px;height:110px;
+      display:grid;place-items:center;
+      border-radius:22px;
+      background:linear-gradient(135deg, rgba(197,91,122,0.12), rgba(197,91,122,0.06));
+      cursor:pointer;
+      transition: transform .2s ease;
+      box-shadow:0 12px 30px rgba(197,91,122,0.06);
+    }
+    .big-heart:hover{transform:translateY(-6px)}
+    .heart-svg{width:58px;height:58px;display:block;fill:var(--accent)}
+
+    .actions{
+      display:flex;
+      gap:12px;
+      margin-top:8px;
+    }
+    .btn{
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid rgba(15,23,42,0.06);
+      background:transparent;
+      font-weight:600;
+      cursor:pointer;
+      transition:background .18s, transform .12s;
+      font-size:14px;
+    }
+    .btn-primary{
+      background:linear-gradient(90deg,var(--accent), #a94d6f);
+      color:white;
+      border: none;
+      box-shadow: 0 12px 30px rgba(197,91,122,0.12);
+    }
+    .btn:active{transform:translateY(1px)}
+
+    .meta {
+      margin-top:6px;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    /* modal (pop-up letter and image lightbox) */
+    .modal-backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(12,14,20,0.45);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:60;
+      padding:20px;
+    }
+    .modal {
+      width:100%;
+      max-width:820px;
+      background:var(--card);
+      border-radius:16px;
+      padding:26px;
+      box-shadow:0 30px 60px rgba(2,6,23,0.45);
+      transform:translateY(18px) scale(.995);
+      opacity:0;
+      transition: transform .22s cubic-bezier(.2,.9,.3,1), opacity .22s;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .modal.show{transform:none;opacity:1}
+    .modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .modal h3{margin:0;font-family:"Playfair Display", serif}
+    .modal p{color:var(--muted);margin-top:8px;line-height:1.6}
+    .close{
+      background:transparent;border:0;font-size:18px;color:var(--muted);cursor:pointer;
+    }
+
+    /* Scrollable letter content */
+    .letter-content {
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 10px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+
+    /* Custom scrollbar */
+    .letter-content::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .letter-content::-webkit-scrollbar-track {
+      background: rgba(197, 91, 122, 0.1);
+      border-radius: 10px;
+    }
+
+    .letter-content::-webkit-scrollbar-thumb {
+      background: var(--accent);
+      border-radius: 10px;
+    }
+
+    .letter-content::-webkit-scrollbar-thumb:hover {
+      background: #a94d6f;
+    }
+
+    /* image lightbox */
+    .lightbox-img{width:100%;height:auto;border-radius:10px;margin-top:14px}
+
+    /* tiny typing caret */
+    .caret{
+      display:inline-block;
+      width:10px;
+      animation: blink 1s steps(2,end) infinite;
+      background:var(--accent);
+      height:1em;
+      vertical-align:middle;
+      margin-left:6px;
+      border-radius:2px;
+      transform-origin:center;
+    }
+    @keyframes blink { 50% { opacity:0.1 } 0% { opacity:1 } 100% { opacity:1 } }
+
+    /* responsive */
+    @media (max-width:920px){
+      .letter-wrap{grid-template-columns:1fr; max-width:720px}
+      .right{order:2}
+      .left{order:1;padding:28px}
+      .photo-frame {
+        width: 120px;
+        height: 120px;
+        top: 25%; /* Adjusted for mobile */
+      }
+      .decorative-hearts {
+        bottom: 15px;
+        right: 15px;
+        width: 100px;
+        height: 100px;
+      }
+    }
+    @media (max-width:768px){
+      .gallery {
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+      .thumb {
+        flex: 0 0 calc(50% - 10px); /* 2 boxes per row on smaller screens */
+        margin-bottom: 12px;
+      }
+      .modal {
+        max-height: 70vh;
+      }
+      .letter-content {
+        max-height: 300px;
+      }
+    }
+    @media (max-width:480px){
+      .gallery{flex-wrap:nowrap; overflow-x:auto;padding-bottom:6px}
+      .thumb{
+        width:72px;
+        height:72px;
+        flex: 0 0 auto; /* Reset flex for horizontal scroll */
+      }
+      .title{font-size:26px}
+      .photo-frame {
+        width: 100px;
+        height: 100px;
+        border-width: 6px;
+        top: 22%; /* Adjusted for mobile */
+      }
+      .decorative-hearts {
+        display: none; /* Hide on very small screens */
+      }
+      .modal {
+        max-height: 65vh;
+        padding: 20px;
+      }
+      .letter-content {
+        max-height: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="letter-wrap" role="main" aria-labelledby="main-title">
+    <!-- Centralized photo frame - MOVED TO TOP -->
+    <div class="photo-frame">
+      <!-- Replace the src with your boyfriend's photo -->
+      <img src="C:\Users\Agrima\Downloads\a.jpg" alt="My love">
+    </div>
+
+    <!-- Decorative hearts in bottom right corner -->
+    <div class="decorative-hearts">
+      <svg class="heart heart-1" viewBox="0 0 24 24">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+      <svg class="heart heart-2" viewBox="0 0 24 24">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+      <svg class="heart heart-3" viewBox="0 0 24 24">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+      <svg class="heart heart-4" viewBox="0 0 24 24">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+      <svg class="heart heart-5" viewBox="0 0 24 24">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+      <svg class="heart heart-6" viewBox="0 0 24 24">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+    </div>
+
+    <!-- LEFT: intro, typed letter and gallery -->
+    <section class="left">
+      <div class="logo">for you</div>
+      <h1 id="main-title" class="title">a small, soft letter — digitally</h1>
+      <div class="subtitle"><h3>Happy Boyfriend's Day my love<h3></div>
+
+      <div class="typed" id="typed">
+        <!-- typed text will appear here -->
+      </div>
+
+       <div class="gallery" aria-label="memories gallery">
+        <button class="thumb" data-img="C:\Users\Agrima\Downloads\b.jfif" data-caption="💖">
+          <img src="C:\Users\Agrima\Downloads\b.jfif" alt="Memory 1">
+        </button>
+        <button class="thumb" data-img="C:\Users\Agrima\Downloads\c.jpg" data-caption="💖">
+          <img src="C:\Users\Agrima\Downloads\c.jpg" alt="Memory 2">
+        </button>
+        <button class="thumb" data-img="C:\Users\Agrima\Downloads\d.jpg" data-caption="💖">
+          <img src="C:\Users\Agrima\Downloads\d.jpg" alt="Memory 3">
+        </button>
+        <button class="thumb" data-img="C:\Users\Agrima\Downloads\e.jfif" data-caption="💖">
+          <img src="C:\Users\Agrima\Downloads\e.jfif" alt="Memory 4">
+        </button>
+      </div>
+
+
+     
+    </section>
+
+    <!-- RIGHT: action card -->
+    <aside class="right" aria-label="actions">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div>
+          <div style="font-size:13px;color:var(--muted)">To</div>
+          <div style="font-weight:700;font-size:18px">Pratham</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:6px">From <strong>Agrima</strong></div>
+        </div>
+
+        <div title="Open surprise" class="big-heart" id="openSurprise" aria-label="Open surprise message">
+          <!-- heart SVG -->
+          <svg class="heart-svg" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 21s-7.5-4.9-9.2-8.3C1.9 9.6 4.2 6 7.5 6c1.8 0 3.1.9 4.5 2.3C12.4 6.9 13.8 6 15.5 6 18.8 6 21.1 9.6 21.2 12.7 19.5 16.1 12 21 12 21z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="info">A little page with memories, nostalgia, words, photos, moments and lots of love</div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="openLetter">Open Letter</button>
+      </div>
+
+     
+    </aside>
+  </main>
+
+  <!-- Modal / Backdrop -->
+  <div id="backdrop" class="modal-backdrop" role="dialog" aria-hidden="true">
+    <div class="modal" role="document" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-head">
+        <h3 id="modal-title">To My Forever Love</h3>
+        <button class="close" id="closeModal" title="Close">&times;</button>
+      </div>
+
+      <div id="modal-body">
+        <!-- content injected via JS -->
+        <p style="margin-top:10px;color:var(--muted)">Loading…</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // For typing animation
+    const letterLines = [
+      "hey love,",
+      "Every moment with you feels like a beautiful dream I never want to wake from —",
+      "You make my heart smile in ways words can't describe",
+      "and I'm grateful for every laugh, hug, and quiet moment we share",
+      "you make ordinary days feel special, and your smile is my favorite view.",
+      "Thank you for being my safe place, my joy, and my forever.",
+      "love you — always.",
+      "— your Agru"
+    ];
+
+   // Combined content for Open Letter button
+const openLetterContent = [
+  "My Dearest Pratham,",
+  "",
+  "Happy Boyfriend's Day. I've been sitting here, trying to figure out how to",
+  "put the last year and a half of my life into words. How do I capture the",
+  "sound of your laugh, the comfort of your hand in mine, or the way my world",
+  "simply settles when I'm with you? It feels like an impossible task, but my",
+  "heart is so full, I have to try.",
+  "",
+  "As I write this letter, my heart overflows with love and gratitude for",
+  "having you in my life. You've brought so much joy, laughter, and meaning",
+  "into my world. I remember our first meeting like it was yesterday - the",
+  "nervous excitement, the shy smiles, and the instant connection we both",
+  "felt. From that moment, I knew there was something special about you.",
+  "",
+  "They say you find out who someone is not when the sun is shining, but when",
+  "the storms roll in. And my love, we've seen our share of storms, haven't we?",
+  "We've faced challenges and 'thick' moments that could have easily pulled us",
+  "apart. But instead of pulling apart, we pulled closer. We held on tight,",
+  "building a shelter out of our love, our trust, and a stubborn refusal to",
+  "let go. Doing life with you doesn't just mean sharing the sunny days and",
+  "the easy laughs—it means knowing, with absolute certainty, that when things",
+  "get hard, I have a partner, a best friend, and a safe harbor in you.",
+  "",
+  "I want to talk about the",
+  "million little sunbeams in between too. The lazy Sunday mornings, the stupid",
+  "jokes that only we find funny, the comfort of silence that isn't silent at",
+  "all because it's filled with our shared peace. Through all our adventures -",
+  "from our first trip to Udaipur to our quiet moments just talking for hours -",
+  "you've shown me what true love means.",
+  "",
+  "You have shown me a surreal kind of love. A love that isn't flashy or perfect,",
+  "but is steady and real. And to me that's all the perfect I'll ever need.",
+  "It's a love that chooses me every single day, in a thousand small ways.",
+  "You've seen me at my most vulnerable, my most difficult, my most me, and",
+  "you've never once flinched. You've made me feel seen, cherished, and deeply",
+  "loved, not in spite of my flaws, but with them.",
+  "",
+  "Thank you for:",
+  "• Always making me feel loved and cherished",
+  "• Your patience and understanding during difficult times",
+  "• The way you remember all the little things that make me happy",
+  "• Being my biggest supporter and cheerleader",
+  "• Making me laugh even on my worst days",
+  "• The way you look at me when I've had a bad day",
+  "• Memorizing the landscape of my heart",
+  "",
+  "A year and a half. In the grand scheme of things, some might say it's not",
+  "that long. But to me, it feels like the beginning of everything. It's the",
+  "foundation of a life I am so excited to keep building with you. You are my",
+  "greatest adventure and my safest place to land, all at once.",
+  "",
+  "You're not just my boyfriend; you're my best friend, my confidant,",
+  "and the person who understands me better than anyone else.",
+  "You are my today and all of my tomorrows.",
+  "",
+  "So today, on Boyfriend's Day, I just want to say thank you. Thank you for",
+  "your strength, your patience, your kindness, and your incredible heart.",
+  "Thank you for choosing 'us' every single day.",
+  "",
+  "I look forward to all the memories we haven't created yet, all the",
+  "adventures waiting for us, and growing old together.",
+  "",
+  "I am so proud to be your girlfriend, and so incredibly in love with the",
+  "man you are.",
+  "",
+  "Here's to us, and to all the beautiful chapters we have yet to write.",
+  "",
+  "With all my love,",
+  "",
+  "Your Agrima 💖"
+];
+
+    const surpriseMessage = `
+      <p style="font-size:15px;color:#111827;line-height:1.6">
+        Happy Boyfriend's Day ❤️<br/>
+        I made this for you because you deserve a little bit of sweetness today.
+        Thank you for being you — kind, goofy, and my favourite human.
+      </p>
+      <p style="margin-top:10px;color:var(--muted)">P.S. There may be a real surprise later (wink).</p>
+    `;
+
+    (function typeIntro(){
+      const target = document.getElementById('typed');
+      let line = 0, char = 0;
+      target.innerHTML = '';
+      function typeChar() {
+        if (line >= letterLines.length) {
+          const caret = document.createElement('span'); caret.className = 'caret';
+          target.appendChild(caret);
+          setTimeout(()=> caret.style.opacity = 0, 900);
+          return;
+        }
+        const current = letterLines[line];
+        if (char <= current.length) {
+          const upTo = current.slice(0,char);
+          const p = target.querySelectorAll('p')[line] || document.createElement('p');
+          p.style.margin = '0 0 5px 0';
+          p.style.fontSize = '13px';
+          p.textContent = upTo;
+          if (!p.parentNode) target.appendChild(p);
+          char++;
+          const speed = 18 + Math.floor(Math.random()*30);
+          setTimeout(typeChar, speed);
+        } else {
+          line++; char = 0;
+          setTimeout(typeChar, 280);
+        }
+      }
+      typeChar();
+    })();
+
+    const backdrop = document.getElementById('backdrop');
+    const modal = backdrop.querySelector('.modal');
+    const modalBody = document.getElementById('modal-body');
+    const closeModalBtn = document.getElementById('closeModal');
+
+    function openModal(html){
+      modalBody.innerHTML = html;
+      backdrop.style.display = 'flex';
+      requestAnimationFrame(()=> setTimeout(()=> modal.classList.add('show'), 10));
+      backdrop.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(){
+      modal.classList.remove('show');
+      backdrop.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+      setTimeout(()=> backdrop.style.display='none', 240);
+    }
+    closeModalBtn.addEventListener('click', closeModal);
+    backdrop.addEventListener('click', (e)=>{ if (e.target === backdrop) closeModal(); });
+    document.addEventListener('keydown', (e)=> { if (e.key === 'Escape') closeModal(); });
+
+    document.getElementById('openSurprise').addEventListener('click', ()=>{ openModal(surpriseMessage); });
+
+    document.getElementById('openLetter').addEventListener('click', ()=>{
+      const html = `
+        <div>
+          <div style="color:var(--muted);margin-bottom:6px">A letter from the heart —</div>
+          <div class="letter-content">
+            ${openLetterContent.map(l => l === "" ? '<br>' : `<p style="margin:0 0 10px 0;line-height:1.6">${l}</p>`).join('')}
+          </div>
+          <div style="margin-top:12px">
+            <button class="btn btn-primary" id="closeFromModal">Close</button>
+          </div>
+        </div>
+      `;
+      openModal(html);
+      setTimeout(()=> { const cb = document.getElementById('closeFromModal'); if (cb) cb.addEventListener('click', closeModal); }, 10);
+    });
+
+    document.querySelectorAll('.thumb').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const src = btn.getAttribute('data-img') || btn.querySelector('img').src;
+        const caption = btn.getAttribute('data-caption') || '';
+        const html = `
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <img class="lightbox-img" src="${src}" alt="${caption}" />
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="color:var(--muted);font-size:14px">${caption}</div>
+            </div>
+          </div>
+        `;
+        openModal(html);
+      });
+    });
+
+    document.querySelectorAll('button').forEach(b=>{
+      b.addEventListener('keyup', (e)=> { if (e.key === 'Enter' || e.key === ' ') b.click(); });
+    });
+  </script>
+</body>
+</html>
